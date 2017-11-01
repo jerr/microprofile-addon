@@ -9,25 +9,33 @@ import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Metadata;
 
-public abstract class AbstractMicroprofileCommand extends AbstractProjectCommand {
+/**
+ * Abstract Command to manage interact with the current project
+ *
+ * @author <a href="mailto:jer@printstacktrace.org">Jeremie Lagarde</a>
+ */
+public abstract class AbstractMicroprofileCommand extends AbstractProjectCommand
+{
 
-    @Inject
-    private ProjectFactory projectFactory;
+   @Inject
+   private ProjectFactory projectFactory;
 
-    
-	@Override
-	public UICommandMetadata getMetadata(UIContext context) {
-		return Metadata.forCommand(getClass()).category(Categories.create("MicroProfile"));
-	}
+   @Override
+   public UICommandMetadata getMetadata(UIContext context)
+   {
+      return Metadata.forCommand(getClass()).category(Categories.create("MicroProfile"));
+   }
 
-	@Override
-	protected ProjectFactory getProjectFactory() {
-		return projectFactory;
-		}
+   @Override
+   protected ProjectFactory getProjectFactory()
+   {
+      return projectFactory;
+   }
 
-	@Override
-	protected boolean isProjectRequired() {
-		return true;
-	}
+   @Override
+   protected boolean isProjectRequired()
+   {
+      return true;
+   }
 
 }

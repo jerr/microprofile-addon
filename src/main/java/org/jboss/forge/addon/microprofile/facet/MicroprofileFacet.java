@@ -25,7 +25,6 @@ import org.jboss.forge.addon.projects.facets.ResourcesFacet;
  *
  * @author <a href="mailto:jer@printstacktrace.org">Jeremie Lagarde</a>
  */
-
 @FacetConstraint(DependencyFacet.class)
 @FacetConstraint(MetadataFacet.class)
 @FacetConstraint(ProjectFacet.class)
@@ -34,92 +33,98 @@ import org.jboss.forge.addon.projects.facets.ResourcesFacet;
 public class MicroprofileFacet extends AbstractFacet<Project> implements ProjectFacet
 {
 
-	   private static final String MICROPROFILE_VERSION_PROPERTY = "version.microprofile";
-	   private static final String MICROPROFILE_VERSION_DEFAULT  = "1.2";
+   private static final String MICROPROFILE_VERSION_PROPERTY = "version.microprofile";
+   private static final String MICROPROFILE_VERSION_DEFAULT = "1.2";
 
-	   public static final Dependency MICROPROFILE_DEPENDENCY = DependencyBuilder
-	            .create().setGroupId("org.eclipse.microprofile")
-	            .setArtifactId("microprofile");
-	           
-	   public static final Dependency MICROPROFILE_BOM = DependencyBuilder
-	            .create().setGroupId("org.eclipse.microprofile")
-	            .setArtifactId("microprofile")
-	            .setVersion("${"+MICROPROFILE_VERSION_PROPERTY+"}")
-	            .setPackaging("pom")
-	            .setScopeType("import");
+   public static final Dependency MICROPROFILE_DEPENDENCY = DependencyBuilder
+            .create().setGroupId("org.eclipse.microprofile")
+            .setArtifactId("microprofile");
 
-	    @Inject
-	    private DependencyResolver resolver;
+   public static final Dependency MICROPROFILE_BOM = DependencyBuilder
+            .create().setGroupId("org.eclipse.microprofile")
+            .setArtifactId("microprofile")
+            .setVersion("${" + MICROPROFILE_VERSION_PROPERTY + "}")
+            .setPackaging("pom")
+            .setScopeType("import");
 
-	    private String version;
+   @Inject
+   private DependencyResolver resolver;
 
-	    public String getDefaultVersion() {
-	    	List<String> availableBOMs = getAvailableVersions();
-	    	if (availableBOMs == null || availableBOMs.isEmpty()) {
-	            return MICROPROFILE_VERSION_DEFAULT;
-	        }
-	        for (int i = availableBOMs.size() - 1; i >= 0; i--) {
-	        	String version = availableBOMs.get(i);
-	            if (!version.endsWith("SNAPSHOT")) {
-	                return version;
-	            }
-	        }
-	        return availableBOMs.get(availableBOMs.size() - 1);
-	    }
+   private String version;
 
-	    public List<String> getAvailableVersions() {
-	    	List<Coordinate> coordinates = resolver.resolveVersions(DependencyQueryBuilder.create(MICROPROFILE_DEPENDENCY.getCoordinate()));
-	    	if(coordinates == null)
-	    		return null;
-	    	
-	    	return coordinates.stream().map(c -> c.getVersion()).collect(toList());
-	    }
+   public String getDefaultVersion()
+   {
+      List<String> availableBOMs = getAvailableVersions();
+      if (availableBOMs == null || availableBOMs.isEmpty())
+      {
+         return MICROPROFILE_VERSION_DEFAULT;
+      }
+      for (int i = availableBOMs.size() - 1; i >= 0; i--)
+      {
+         String version = availableBOMs.get(i);
+         if (!version.endsWith("SNAPSHOT"))
+         {
+            return version;
+         }
+      }
+      return availableBOMs.get(availableBOMs.size() - 1);
+   }
 
-	    
-	   @Override
-	   public boolean install()
-	   {
-		  addMicroprofileVersionProperty();
-	      addMicroprofileBOMDependency();
-	      return isInstalled();
-	   }
+   public List<String> getAvailableVersions()
+   {
+      List<Coordinate> coordinates = resolver
+               .resolveVersions(DependencyQueryBuilder.create(MICROPROFILE_DEPENDENCY.getCoordinate()));
+      if (coordinates == null)
+         return null;
 
-	   @Override
-	   public boolean isInstalled()
-	   {
-	        DependencyFacet dependencyFacet = getFaceted().getFacet(DependencyFacet.class);
-	        boolean hasBOM = dependencyFacet.hasEffectiveManagedDependency(MICROPROFILE_BOM);
+      return coordinates.stream().map(c -> c.getVersion()).collect(toList());
+   }
 
-	        MetadataFacet metadataFacet = getFaceted().getFacet(MetadataFacet.class);
-	        boolean hasVersion = metadataFacet.getEffectiveProperty(MICROPROFILE_VERSION_PROPERTY) == null; 
-	        
-	        return hasBOM && hasVersion;
-	   }
+   @Override
+   public boolean install()
+   {
+      addMicroprofileVersionProperty();
+      addMicroprofileBOMDependency();
+      return isInstalled();
+   }
 
-	   private void addMicroprofileVersionProperty()
-	   {
+   @Override
+   public boolean isInstalled()
+   {
+      DependencyFacet dependencyFacet = getFaceted().getFacet(DependencyFacet.class);
+      boolean hasBOM = dependencyFacet.hasEffectiveManagedDependency(MICROPROFILE_BOM);
 
-	        MetadataFacet metadataFacet = getFaceted().getFacet(MetadataFacet.class);
+      MetadataFacet metadataFacet = getFaceted().getFacet(MetadataFacet.class);
+      boolean hasVersion = metadataFacet.getEffectiveProperty(MICROPROFILE_VERSION_PROPERTY) == null;
 
-	        String installedVersion = metadataFacet.getDirectProperty(MICROPROFILE_VERSION_PROPERTY);
-	        if (installedVersion == null || !installedVersion.equals(getVersion())) {
-	            metadataFacet.setDirectProperty(MICROPROFILE_VERSION_PROPERTY, getVersion());
-	        }
-	   }
+      return hasBOM && hasVersion;
+   }
 
-	   private void addMicroprofileBOMDependency()
-	   {
-	      DependencyFacet dependencyFacet = getFaceted().getFacet(DependencyFacet.class);
-	      dependencyFacet.addDirectManagedDependency(MICROPROFILE_BOM);
-	   }
+   private void addMicroprofileVersionProperty()
+   {
 
-	   public void setVersion(String version) {
-	        this.version = version;
-       }
+      MetadataFacet metadataFacet = getFaceted().getFacet(MetadataFacet.class);
 
+      String installedVersion = metadataFacet.getDirectProperty(MICROPROFILE_VERSION_PROPERTY);
+      if (installedVersion == null || !installedVersion.equals(getVersion()))
+      {
+         metadataFacet.setDirectProperty(MICROPROFILE_VERSION_PROPERTY, getVersion());
+      }
+   }
 
-	   private String getVersion()
-	   {
-	      return version!=null?version:getDefaultVersion();
-	   }
-	}
+   private void addMicroprofileBOMDependency()
+   {
+      DependencyFacet dependencyFacet = getFaceted().getFacet(DependencyFacet.class);
+      dependencyFacet.addDirectManagedDependency(MICROPROFILE_BOM);
+   }
+
+   public void setVersion(String version)
+   {
+      this.version = version;
+   }
+
+   private String getVersion()
+   {
+      return version != null ? version : getDefaultVersion();
+   }
+}
