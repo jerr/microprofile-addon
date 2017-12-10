@@ -1,4 +1,4 @@
-package org.jboss.forge.addon.microprofile.facet;
+package org.jboss.forge.addon.microprofile.core.facet;
 
 import static java.util.stream.Collectors.toList;
 

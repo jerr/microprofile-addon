@@ -1,9 +1,9 @@
-package org.jboss.forge.addon.microprofile.ui;
+package org.jboss.forge.addon.microprofile.core.ui;
 
 import javax.inject.Inject;
 
 import org.jboss.forge.addon.facets.FacetFactory;
-import org.jboss.forge.addon.microprofile.facet.MicroprofileFacet;
+import org.jboss.forge.addon.microprofile.core.facet.MicroprofileFacet;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
@@ -36,7 +36,6 @@ public class SetupCommand extends AbstractMicroprofileCommand
    @Override
    public UICommandMetadata getMetadata(UIContext context)
    {
-
       return Metadata.from(super.getMetadata(context), getClass()).name("MicroProfile: Setup")
                .description("Setup MicroProfile in your project");
    }
