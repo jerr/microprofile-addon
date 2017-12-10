@@ -45,7 +45,7 @@ public class MicroprofileFacet extends AbstractFacet<Project> implements Project
             .setArtifactId("microprofile")
             .setVersion("${" + MICROPROFILE_VERSION_PROPERTY + "}")
             .setPackaging("pom")
-            .setScopeType("import");
+            .setScopeType("provided");
 
    @Inject
    private DependencyResolver resolver;
@@ -115,7 +115,7 @@ public class MicroprofileFacet extends AbstractFacet<Project> implements Project
    private void addMicroprofileBOMDependency()
    {
       DependencyFacet dependencyFacet = getFaceted().getFacet(DependencyFacet.class);
-      dependencyFacet.addDirectManagedDependency(MICROPROFILE_BOM);
+      dependencyFacet.addDirectDependency(MICROPROFILE_BOM);
    }
 
    public void setVersion(String version)
