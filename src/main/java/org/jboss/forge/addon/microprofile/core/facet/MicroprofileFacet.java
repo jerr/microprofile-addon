@@ -92,10 +92,10 @@ public class MicroprofileFacet extends AbstractFacet<Project> implements Project
    public boolean isInstalled()
    {
       DependencyFacet dependencyFacet = getFaceted().getFacet(DependencyFacet.class);
-      boolean hasBOM = dependencyFacet.hasEffectiveManagedDependency(MICROPROFILE_BOM);
+      boolean hasBOM = dependencyFacet.hasEffectiveDependency(MICROPROFILE_BOM);
 
       MetadataFacet metadataFacet = getFaceted().getFacet(MetadataFacet.class);
-      boolean hasVersion = metadataFacet.getEffectiveProperty(MICROPROFILE_VERSION_PROPERTY) == null;
+      boolean hasVersion = metadataFacet.getEffectiveProperty(MICROPROFILE_VERSION_PROPERTY) != null;
 
       return hasBOM && hasVersion;
    }
