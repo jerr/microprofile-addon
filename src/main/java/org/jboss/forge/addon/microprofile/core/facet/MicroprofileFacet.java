@@ -1,4 +1,4 @@
-package org.jboss.forge.addon.microprofile.facet;
+package org.jboss.forge.addon.microprofile.core.facet;
 
 import static java.util.stream.Collectors.toList;
 
@@ -45,7 +45,7 @@ public class MicroprofileFacet extends AbstractFacet<Project> implements Project
             .setArtifactId("microprofile")
             .setVersion("${" + MICROPROFILE_VERSION_PROPERTY + "}")
             .setPackaging("pom")
-            .setScopeType("import");
+            .setScopeType("provided");
 
    @Inject
    private DependencyResolver resolver;
@@ -92,10 +92,10 @@ public class MicroprofileFacet extends AbstractFacet<Project> implements Project
    public boolean isInstalled()
    {
       DependencyFacet dependencyFacet = getFaceted().getFacet(DependencyFacet.class);
-      boolean hasBOM = dependencyFacet.hasEffectiveManagedDependency(MICROPROFILE_BOM);
+      boolean hasBOM = dependencyFacet.hasEffectiveDependency(MICROPROFILE_BOM);
 
       MetadataFacet metadataFacet = getFaceted().getFacet(MetadataFacet.class);
-      boolean hasVersion = metadataFacet.getEffectiveProperty(MICROPROFILE_VERSION_PROPERTY) == null;
+      boolean hasVersion = metadataFacet.getEffectiveProperty(MICROPROFILE_VERSION_PROPERTY) != null;
 
       return hasBOM && hasVersion;
    }
@@ -115,7 +115,7 @@ public class MicroprofileFacet extends AbstractFacet<Project> implements Project
    private void addMicroprofileBOMDependency()
    {
       DependencyFacet dependencyFacet = getFaceted().getFacet(DependencyFacet.class);
-      dependencyFacet.addDirectManagedDependency(MICROPROFILE_BOM);
+      dependencyFacet.addDirectDependency(MICROPROFILE_BOM);
    }
 
    public void setVersion(String version)

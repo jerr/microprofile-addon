@@ -1,4 +1,4 @@
-package org.jboss.forge.addon.microprofile.ui;
+package org.jboss.forge.addon.microprofile.core.ui;
 
 import javax.inject.Inject;
 
